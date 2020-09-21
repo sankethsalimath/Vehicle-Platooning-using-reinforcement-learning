@@ -5,21 +5,23 @@ import time
 class tiny_yolo_detect:
     def __init__(self):
         # Load Yolo
-        self.net = cv2.dnn.readNet("weights/yolov3-tiny.weights", "cfg/yolov3-tiny.cfg")
+        self.net = cv2.dnn.readNet("object_detection/yolov3-tiny.weights","object_detection/yolov3-tiny.cfg")
         self.classes = []
-        with open("coco.names", "r") as f:
+        with open("object_detection/coco2.names", "r") as f:
             self.classes = [line.strip() for line in f.readlines()]
         self.layer_names = self.net.getLayerNames()
         self.output_layers = [self.layer_names[i[0] - 1] for i in self.net.getUnconnectedOutLayers()]
         self.colors = np.random.uniform(0, 255, size=(len(self.classes), 3))
 
-    def load_img(self, cap, SHOW_FPS=False):
+    def load_img(self, file, SHOW_FPS=False):
         # Loading image
+        cap = cv2.VideoCapture(file)
         font = cv2.FONT_HERSHEY_PLAIN
         starting_time = time.time()
         frame_id = 0
         while True:
             _, frame = cap.read()
+            frame = cv2.resize(frame,(1280,720))
             frame_id += 1
 
             height, width, channels = frame.shape
@@ -83,3 +85,4 @@ class tiny_yolo_detect:
 
     def destroy(self):
         cv2.destroyAllWindows()
+
