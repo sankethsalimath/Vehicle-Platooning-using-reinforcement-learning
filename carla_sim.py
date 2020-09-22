@@ -6,7 +6,7 @@ import random
 import time
 import cv2
 import math
-import gym
+from object_detection import real_time_yolo as ry
 
 try:
     sys.path.append(glob.glob('../carla/dist/carla-*%d.%d-%s.egg' %(
@@ -32,6 +32,8 @@ class CarEnv:
         self.world = self.client.get_world()
         self.blueprint_library = self.world.get_blueprint_library()
         self.model_3 = self.blueprint_library.filter("model3")[0]
+        self.det = ry.tiny_yolo_detect()
+
 
     def transform(self, x, y, z):
         self.actor_list = []
@@ -101,7 +103,8 @@ class CarEnv:
         i3[:, :, :3][mask] = [0, 0, 0]
         #print(i3[1, 1, :3])
         if self.SHOW_CAM:
-            cv2.imshow("", i3)
+            self.det.load_img(i3)
+            #cv2.imshow("", i3)
             cv2.waitKey(1)
         self.front_camera = i3
         return i3/255.0
