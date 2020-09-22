@@ -6,7 +6,7 @@ import random
 import time
 import cv2
 import math
-from object_detection import real_time_yolo as ry
+from tiny_yolo import real_time_yolo as ry
 
 try:
     sys.path.append(glob.glob('../carla/dist/carla-*%d.%d-%s.egg' %(
