@@ -15,16 +15,19 @@ class tiny_yolo_detect:
 
     def load_img(self, file, SHOW_FPS=False):
         # Loading image
-        cap = cv2.VideoCapture(file)
+        #cap = cv2.VideoCapture(file)
+        cap = file
         font = cv2.FONT_HERSHEY_PLAIN
         starting_time = time.time()
         frame_id = 0
         while True:
-            _, frame = cap.read()
+            #_, frame = cap.read()
+            frame = cap
             frame = cv2.resize(frame,(1280,720))
             frame_id += 1
 
             height, width, channels = frame.shape
+
 
             # Detecting objects
             blob = cv2.dnn.blobFromImage(frame, 0.00392, (416, 416), (0, 0, 0), True, crop=False)
@@ -70,7 +73,7 @@ class tiny_yolo_detect:
             if SHOW_FPS == True:
                 show_fps()
 
-            cv2.imshow("Image", frame)
+            cv2.imshow("Detections", frame)
             key = cv2.waitKey(1)
             if key == 27:
                 break
@@ -85,4 +88,3 @@ class tiny_yolo_detect:
 
     def destroy(self):
         cv2.destroyAllWindows()
-
